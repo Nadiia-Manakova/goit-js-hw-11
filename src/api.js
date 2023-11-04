@@ -17,6 +17,6 @@ export const getData = async (searchQuery, page = 1) => {
         const response = await axios.get(`?${urlSeaParams}`);
         return response.data; 
     } catch (error) {
-        return error
+        Notify.warning('Oops! Something went wrong');
     }
 };

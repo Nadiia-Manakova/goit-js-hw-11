@@ -8,6 +8,7 @@ const formEl = document.querySelector('.search-form');
 const galleryEl = document.querySelector('.gallery');
 const loadMoreEl = document.querySelector('.load-more');
 
+const lightbox = new SimpleLightbox('.gallery a')
 let page = 1;
 let value = '';
 formEl.addEventListener('submit', onSubmit);
@@ -33,9 +34,11 @@ async function onSubmit(evt) {
             loadMoreEl.classList.remove(`is-hidden`);
         }
         const markup = createGallery(hits);
-        addMarkup(markup)
+        addMarkup(markup);
+        lightbox.refresh();
+        //scrollPage();
     } catch (error) {
-        console.log(error)
+        onError()
     } finally {
         evt.target.reset();
     }
@@ -84,12 +87,28 @@ async function onClick() {
         const { totalHits, hits } = await getData(value, page);
         const markup = createGallery(hits);
         addMarkup(markup)
-
+        lightbox.refresh();
+        scrollPage();
         if (page * 40 >= totalHits) {
             loadMoreEl.classList.add('is-hidden');
             Notify.info(`We're sorry, but you've reached the end of search results.`);
         }
     } catch (error) {
-        console.log(error)
+        onError()
     }
+}
+
+function onError() {
+    Notify.warning('Oops! Something went wrong');
+}
+
+function scrollPage() {
+    const { height: cardHeight } = document
+  .querySelector(".gallery")
+  .firstElementChild.getBoundingClientRect();
+
+window.scrollBy({
+  top: cardHeight * 2,
+  behavior: "smooth",
+});
 }

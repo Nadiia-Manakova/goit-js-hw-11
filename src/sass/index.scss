@@ -82,8 +82,10 @@ flex-direction: column;
  .load-more {
 margin: 0 auto;
 display: block;
+margin-top: 20px;
  }
 
  .load-more.is-hidden{
     display: none;
+    
  }
